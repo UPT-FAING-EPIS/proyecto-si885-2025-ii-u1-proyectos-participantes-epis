@@ -1,8 +1,9 @@
-// Contenido de variables.tf
+// Contenido de terraform/variables.tf
 
 variable "gcp_project_id" {
   description = "El ID del proyecto de Google Cloud."
   type        = string
+  default     = "proyecto-inteligencia-negocios" # <--- VALOR MOVido AQUÍ
 }
 
 variable "gcp_region" {
@@ -11,21 +12,21 @@ variable "gcp_region" {
   default     = "us-central1"
 }
 
-// NUEVA VARIABLE: Una lista con los nombres de todas las bases de datos que quieres crear.
 variable "database_names" {
   description = "Una lista de nombres para las bases de datos a crear."
   type        = list(string)
-  default     = [] // Por defecto, una lista vacía.
+  default     = ["inteligencia_negocios"] # <--- VALOR MOVido AQUÍ
 }
 
-// NUEVA VARIABLE: El nombre de usuario para la base de datos.
 variable "db_user_name" {
   description = "El nombre de usuario para la base de datos."
   type        = string
+  default     = "admin_negocios" # <--- VALOR MOVido AQUÍ
 }
 
 variable "db_password" {
   description = "La contraseña para el usuario de la base de datos."
   type        = string
   sensitive   = true
+  # ¡SIN VALOR POR DEFECTO! Esto es un secreto y se pasará de forma segura.
 }

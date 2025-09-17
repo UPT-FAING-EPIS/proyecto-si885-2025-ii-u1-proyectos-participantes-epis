@@ -10,13 +10,14 @@ on:
 
 jobs:
   # ------ JOB PARA INFRACOST ------
+  # Se ejecuta solo en Pull Requests para mostrar el impacto de los costos antes de fusionar.
   infracost:
     name: 'Análisis de Costos con Infracost'
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: write
+      pull-requests: write # Permiso para escribir comentarios en el PR
     
     steps:
       - name: Checkout
@@ -31,11 +32,12 @@ jobs:
         uses: infracost/actions/comment@v2
         with:
           path: ./terraform
-          # La bandera debe ser 'terraform-var-file' en singular.
-          terraform-var-file: terraform.tfvars # <-- ¡CORRECCIÓN APLICADA!
+          # Se usa la bandera corregida 'terraform-var-file' (singular).
+          terraform-var-file: terraform.tfvars
           behavior: update
 
   # ------ JOB PARA APLICAR CAMBIOS ------
+  # Se ejecuta solo cuando se hace push (o se fusiona un PR) a la rama 'main'.
   terraform-apply:
     name: 'Apply Terraform'
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -63,3 +65,8 @@ jobs:
 
     - name: Terraform Apply
       run: terraform apply -auto-approve
+      # --- CORRECCIÓN CRÍTICA AÑADIDA AQUÍ ---
+      # Pasa el secret de la contraseña de la BD como una variable de entorno.
+      # Esto evita que el 'apply' se quede esperando una entrada manual.
+      env:
+        TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
