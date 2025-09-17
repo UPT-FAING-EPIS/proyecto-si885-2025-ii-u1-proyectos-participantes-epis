@@ -1,0 +1,33 @@
+name: 'Terraform CI/CD'
+on:
+  push:
+    branches:
+      - main
+jobs:
+  terraform:
+    name: 'Apply Terraform'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Google Auth
+      id: auth
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Plan
+      run: terraform plan
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve

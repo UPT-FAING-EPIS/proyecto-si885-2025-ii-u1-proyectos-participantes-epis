@@ -1,0 +1,6 @@
+# Archivos de credenciales, variables y estado local
+*.json
+*.tfvars
+*.tfstate
+*.tfstate.*
+.terraform/
