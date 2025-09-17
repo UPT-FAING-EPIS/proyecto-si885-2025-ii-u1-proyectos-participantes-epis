@@ -22,12 +22,6 @@ resource "google_sql_database_instance" "mysql_instance" {
 
   settings {
     tier = "db-f1-micro"
-    
-    # --- CONFIGURACIÓN DE AHORRO MÁXIMO ---
-    # La política 'NEVER' le dice a la instancia que se detenga
-    # tras unos minutos de inactividad. Solo se activará (y facturará)
-    # cuando reciba una conexión.
-    activation_policy = "NEVER"
   }
   
   deletion_protection = false
